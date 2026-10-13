@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090b12">
+  <title>AMHK | Panel</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #090b12;
+      color: #f4f5f8;
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+    }
+    main {
+      width: 100%;
+      max-width: 430px;
+      padding: 28px;
+      border: 1px solid #292d3c;
+      border-radius: 20px;
+      background: #121522;
+      text-align: center;
+    }
+    .logo { color: #a78bfa; font-size: 38px; font-weight: 900; }
+    h1 { margin-bottom: 8px; }
+    p { color: #aab0c2; line-height: 1.6; }
+    .status {
+      margin: 24px 0;
+      padding: 14px;
+      border-radius: 12px;
+      background: #1b2630;
+      color: #86efac;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 10px;
+      background: #8b5cf6;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    #resultado { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="logo">AMHK</div>
+    <h1>Panel de acceso</h1>
+    <p>Tu proyecto web ya está tomando forma.</p>
+    <div class="status" id="estado">Comprobando servidor...</div>
+    <button onclick="comprobar()">Comprobar conexión</button>
+    <p id="resultado"></p>
+  </main>
+  <script>
+    async function comprobar() {
+      const estado = document.getElementById('estado');
+      const resultado = document.getElementById('resultado');
+      estado.textContent = 'Comprobando...';
+      try {
+        const respuesta = await fetch('/api/status');
+        const datos = await respuesta.json();
+        estado.textContent = datos.online
+          ? '● Servidor activo'
+          : 'Servidor no disponible';
+        resultado.textContent = datos.message;
+      } catch (error) {
+        estado.textContent = 'No se pudo conectar';
+        resultado.textContent = 'Comprueba que el servidor esté iniciado.';
+      }
+    }
+    comprobar();
+  </script>
+</body>
+</html>
